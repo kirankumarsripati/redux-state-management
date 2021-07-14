@@ -88,6 +88,3 @@ store.subscribe(() => {
 - For updating state we should have some strict rules
 
 - For example - [https://todomvc.com/examples/angular2/](https://todomvc.com/examples/angular2/)
-
-## Slides
-- Explain actions
