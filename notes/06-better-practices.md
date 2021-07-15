@@ -1,35 +1,8 @@
-// Library Code
-function createStore(reducer) {
-  // The store should have four parts
-  // 1. The state
-  // 2. Get the state
-  // 3. Listen to changes on the state
-  // 4. Update the state
+# Better Practices
 
-  let state;
-  let listeners = [];
+## Update Actions with const
 
-  const getState = () => state;
-
-  const subscribe = (listener) => {
-    listeners.push(listener);
-    return () => {
-      listeners = listeners.filter((l) => l !== listener);
-    }
-  }
-
-  const dispatch = (action) => {
-    state = reducer(state, action);
-    listeners.forEach((listener) => listener());
-  }
-
-  return {
-    getState,
-    subscribe,
-    dispatch,
-  };
-}
-
+```js
 // App Code
 const TODOS = {
   ADD_TODO: 'ADD_TODO',
@@ -40,42 +13,6 @@ const TODOS = {
 const GOALS = {
   ADD_GOAL: 'ADD_GOAL',
   REMOVE_GOAL: 'REMOVE_GOAL',
-}
-
-// Action Creator
-function addTodoAction(todo) {
-  return {
-    type: TODOS.ADD_TODO,
-    payload: todo,
-  }
-}
-
-function removeTodoAction(id) {
-  return {
-    type: TODOS.REMOVE_TODO,
-    payload: { id },
-  }
-}
-
-function toggleTodoAction(id) {
-  return {
-    type: TODOS.TOGGLE_TODO,
-    payload: { id },
-  }
-}
-
-function addGoalAction(goal) {
-  return {
-    type: GOALS.ADD_GOAL,
-    payload: goal,
-  }
-}
-
-function removeGoalAction(id) {
-  return {
-    type: GOALS.REMOVE_GOAL,
-    payload: { id },
-  }
 }
 
 function todos(state = [], action) {
@@ -120,6 +57,112 @@ store.subscribe(() => {
   console.log(`The new state is: `, store.getState());
 });
 
+store.dispatch({
+  type: TODOS.ADD_TODO,
+  payload: {
+    id: 0,
+    name: 'Walk the dog',
+    completed: false,
+  }
+});
+
+store.dispatch({
+  type: TODOS.ADD_TODO,
+  payload: {
+    id: 1,
+    name: 'Wash the bike',
+    completed: false,
+  }
+});
+
+store.dispatch({
+  type: TODOS.ADD_TODO,
+  payload: {
+    id: 2,
+    name: 'Go to the gym',
+    completed: true,
+  }
+});
+
+store.dispatch({
+  type: TODOS.REMOVE_TODO,
+  payload: {
+    id: 1,
+  }
+});
+
+store.dispatch({
+  type: TODOS.TOGGLE_TODO,
+  payload: {
+    id: 0,
+  }
+});
+
+store.dispatch({
+  type: GOALS.ADD_GOAL,
+  payload: {
+    id: 0,
+    name: 'Learn Redux',
+  }
+});
+
+store.dispatch({
+  type: GOALS.ADD_GOAL,
+  payload: {
+    id: 1,
+    name: 'Lose weight',
+  }
+});
+
+store.dispatch({
+  type: GOALS.REMOVE_GOAL,
+  payload: {
+    id: 0,
+  }
+});
+```
+
+## Add action creators
+
+```js
+// Action Creator
+function addTodoAction(todo) {
+  return {
+    type: TODOS.ADD_TODO,
+    payload: todo,
+  }
+}
+
+function removeTodoAction(id) {
+  return {
+    type: TODOS.REMOVE_TODO,
+    payload: { id },
+  }
+}
+
+function toggleTodoAction(id) {
+  return {
+    type: TODOS.TOGGLE_TODO,
+    payload: { id },
+  }
+}
+
+function addGoalAction(goal) {
+  return {
+    type: GOALS.ADD_GOAL,
+    payload: goal,
+  }
+}
+
+function removeGoalAction(id) {
+  return {
+    type: GOALS.REMOVE_GOAL,
+    payload: { id },
+  }
+}
+
+
+
 store.dispatch(addTodoAction({
   id: 0,
   name: 'Walk the dog',
@@ -153,3 +196,4 @@ store.dispatch(addGoalAction({
 }));
 
 store.dispatch(removeGoalAction(0));
+```
