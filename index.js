@@ -39,7 +39,7 @@ function todos(state = [], action) {
       return state.filter((todo) => todo.id !== action.payload.id);
     case 'TOGGLE_TODO':
       return state.map((todo) => {
-        return todo.payload.id !== action.payload.id ? todo : {
+        return todo.id !== action.payload.id ? todo : {
           ...todo,
           completed: !todo.completed,
         }
@@ -60,7 +60,14 @@ function goals(state = [], action) {
   }
 }
 
-const store = createStore(todos);
+function app(state = {}, action){
+  return {
+    todos: todos(state.todos, action),
+    goals: goals(state.goals, action),
+  }
+}
+
+const store = createStore(app);
 
 store.subscribe(() => {
   console.log(`The new state is: `, store.getState());
@@ -70,7 +77,62 @@ store.dispatch({
   type: 'ADD_TODO',
   payload: {
     id: 0,
-    name: 'Learn Redux',
+    name: 'Walk the dog',
     completed: false,
+  }
+});
+
+store.dispatch({
+  type: 'ADD_TODO',
+  payload: {
+    id: 1,
+    name: 'Wash the bike',
+    completed: false,
+  }
+});
+
+store.dispatch({
+  type: 'ADD_TODO',
+  payload: {
+    id: 2,
+    name: 'Go to the gym',
+    completed: true,
+  }
+});
+
+store.dispatch({
+  type: 'REMOVE_TODO',
+  payload: {
+    id: 1,
+  }
+});
+
+store.dispatch({
+  type: 'TOGGLE_TODO',
+  payload: {
+    id: 0,
+  }
+});
+
+store.dispatch({
+  type: 'ADD_GOAL',
+  payload: {
+    id: 0,
+    name: 'Learn Redux',
+  }
+});
+
+store.dispatch({
+  type: 'ADD_GOAL',
+  payload: {
+    id: 1,
+    name: 'Lose weight',
+  }
+});
+
+store.dispatch({
+  type: 'REMOVE_GOAL',
+  payload: {
+    id: 0,
   }
 });
